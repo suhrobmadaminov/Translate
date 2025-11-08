@@ -1,0 +1,5 @@
+# This project is a pure front-end (HTML/CSS/JS) application.
+# No Python dependencies are required. This file is provided for completeness
+# when deploying or sharing the project repository on platforms expecting
+# a requirements list.
+

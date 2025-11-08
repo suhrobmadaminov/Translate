@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Uz-En-Ru real-time translation web app" />
+    <title>Uz-En-Ru Live Translator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="gradient-bg"></div>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="logo">
+          <span class="logo-mark">UZ</span>
+          <span class="logo-text">Polyglot Translator</span>
+        </div>
+        <div class="header-meta">
+          <span class="status-indicator" id="online-status">
+            <span class="dot"></span>
+            <span class="status-text">Online</span>
+          </span>
+          <div class="stats-chip">
+            <span id="total-translations">0</span>
+            <span class="chip-label">Tarjimalar</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section class="translator-card glass-card">
+          <div class="card-header">
+            <h1>Uz-En-Ru Live Translator</h1>
+            <p>Real-time tarjima qiling, offline rejim va tarix bilan.</p>
+          </div>
+          <div class="translator-grid">
+            <div class="input-panel">
+              <div class="panel-header">
+                <label for="from-language">Qaysi tildan</label>
+                <div class="controls">
+                  <label class="checkbox">
+                    <input type="checkbox" id="auto-detect" checked />
+                    <span>Tilni aniqlash</span>
+                  </label>
+                  <select id="from-language" class="language-select" disabled>
+                    <option value="uz">O'zbek</option>
+                    <option value="en">Ingliz</option>
+                    <option value="ru">Rus</option>
+                  </select>
+                </div>
+              </div>
+              <textarea
+                id="input-text"
+                class="text-input"
+                placeholder="Tarjima uchun matn kiriting..."
+                rows="6"
+              ></textarea>
+              <div class="panel-footer">
+                <div class="detected-language" id="detected-language">
+                  Aniqlangan til: —
+                </div>
+                <div class="input-actions">
+                  <button type="button" id="clear-input" class="ghost-button">
+                    Tozalash
+                  </button>
+                  <button type="button" id="voice-input" class="ghost-button" disabled>
+                    Mikrofon (tez orada)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="middle-controls">
+              <button type="button" id="swap-languages" class="swap-button" aria-label="Tilni almashtirish">
+                <span class="swap-icon">⇄</span>
+              </button>
+              <button type="button" id="translate-button" class="primary-button">
+                Tarjima qilish
+              </button>
+              <div class="loading-indicator" id="loading-indicator">
+                <div class="dot dot-a"></div>
+                <div class="dot dot-b"></div>
+                <div class="dot dot-c"></div>
+                <span>Tarjima qilinyapti...</span>
+              </div>
+              <div class="error-banner hidden" id="error-banner"></div>
+            </div>
+
+            <div class="output-panel">
+              <div class="panel-header">
+                <label for="to-language">Qaysi tilga</label>
+                <select id="to-language" class="language-select">
+                  <option value="en">Ingliz</option>
+                  <option value="ru">Rus</option>
+                  <option value="uz">O'zbek</option>
+                </select>
+              </div>
+              <div class="output-card">
+                <div class="main-output" id="main-output">
+                  <p class="placeholder">Natija shu yerda paydo bo'ladi</p>
+                </div>
+                <div class="extra-output" id="extra-output"></div>
+              </div>
+              <div class="output-actions">
+                <button type="button" id="copy-output" class="ghost-button">
+                  Nusxalash
+                </button>
+                <button type="button" id="share-output" class="ghost-button">
+                  Ulashish
+                </button>
+                <button type="button" id="favorite-output" class="ghost-button">
+                  ★ Saqlash
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="sidebar">
+          <section class="history-card glass-card">
+            <div class="section-header">
+              <h2>Tarjima tarixi</h2>
+              <div class="history-actions">
+                <button type="button" id="download-history" class="ghost-button">
+                  Yuklab olish
+                </button>
+                <button type="button" id="clear-history" class="ghost-button danger">
+                  Tozalash
+                </button>
+              </div>
+            </div>
+            <div class="history-list" id="history-list"></div>
+          </section>
+
+          <section class="favorites-card glass-card">
+            <div class="section-header">
+              <h2>Sevimlilar</h2>
+            </div>
+            <div class="favorites-list" id="favorites-list">
+              <p class="placeholder">Hozircha sevimli tarjima yo'q.</p>
+            </div>
+          </section>
+
+          <section class="stats-card glass-card">
+            <div class="section-header">
+              <h2>Statistika</h2>
+            </div>
+            <ul class="stats-list">
+              <li>
+                <span>Jami tarjimalar</span>
+                <strong id="stat-total">0</strong>
+              </li>
+              <li>
+                <span>Bugungi tarjimalar</span>
+                <strong id="stat-today">0</strong>
+              </li>
+              <li>
+                <span>Eng ko'p ishlatilgan til</span>
+                <strong id="stat-top">—</strong>
+              </li>
+              <li>
+                <span>API limit</span>
+                <strong id="stat-api">500 dan 500</strong>
+              </li>
+            </ul>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="app-footer">
+        <div>
+          <span>© <span id="current-year"></span> Polyglot Translator</span>
+          <span class="dot-separator">•</span>
+          <span>MyMemory Translation API</span>
+        </div>
+        <div>
+          <span>Offline lug'at: 100 mashhur so'z</span>
+          <span class="dot-separator">•</span>
+          <span>Versiya 1.0</span>
+        </div>
+      </footer>
+    </div>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
+
